@@ -1,15 +1,13 @@
-from typing import Literal
 from emmetify.config import EmmetifierConfig
-from emmetify.converters.html_converter import HtmlConverter
-from emmetify.parsers.html_parser import HtmlParser
+from emmetify.parsers import get_parser
+from emmetify.converters import get_converter
+from emmetify.types import SupportedFormats, DefaultFormat
 
-
-SupportedFormats = Literal["html"]
 
 class Emmetifier:
     def __init__(
         self,
-        format: SupportedFormats = "html",
+        format: SupportedFormats = DefaultFormat,
         config: EmmetifierConfig | dict | None = None
     ):
         # Handle config
@@ -23,26 +21,15 @@ class Emmetifier:
             )
         )
 
-        self._parser = self._get_parser(format)
-        self._converter = self._get_converter(format)
+        self._parser = get_parser(format, self.config)
+        self._converter = get_converter(format, self.config)
 
-    def _get_parser(self, format: SupportedFormats):
-        return {
-            "html": HtmlParser(self.config),
-        }.get(format, HtmlParser(self.config))
-
-    def _get_converter(self, format: SupportedFormats):
-        return {
-            "html": HtmlConverter(self.config),
-        }.get(format, HtmlConverter(self.config))
 
     def emmetify(self, content: str) -> str:
-        nodes = self._parser.parse(content)
-        return self._converter.convert(nodes)
+        content_nodes = self._parser.parse(content)
+        return self._converter.convert(content_nodes)
 
     @classmethod
-    def create(cls, format: SupportedFormats = "html", **config_kwargs) -> "Emmetifier":
+    def create(cls, format: SupportedFormats = DefaultFormat, **config_kwargs) -> "Emmetifier":
         """Factory method with IDE support for config"""
         return cls(format=format, config=EmmetifierConfig(**config_kwargs))
-
-

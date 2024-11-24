@@ -50,7 +50,7 @@ class HtmlConfig(BaseModel):
         },
         description="Tags to skip during conversion"
     )
-    attributes: HtmlAttributePriority = Field(
+    attribute_priority: HtmlAttributePriority = Field(
         default_factory=HtmlAttributePriority,
         description="Attribute priority configuration"
     )

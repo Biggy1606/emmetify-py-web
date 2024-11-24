@@ -162,10 +162,9 @@ cython_debug/
 #.idea/
 
 # AI
+.cursorignore
 .aider*
 .ref
 
-
-# RepoAtlas
-desc.json
-emmetify/convert/tests/data/core/expanded.html
+# Other
+.scratch/

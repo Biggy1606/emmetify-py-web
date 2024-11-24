@@ -7,8 +7,8 @@ class EmmetifierConfig(BaseModel):
     
     # Optimization options
     simplify_classes: bool = False
-    simplify_urls: bool = False
-    simplify_src: bool = False
+    simplify_links: bool = False
+    simplify_images: bool = False
     
     # Debug options
     debug: bool = False
