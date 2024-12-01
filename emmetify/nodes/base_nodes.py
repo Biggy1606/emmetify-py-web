@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
-from typing import Generic, List, Set, TypeVar, Dict
+from abc import ABC
+from typing import Generic, TypeVar
 
 
 class BaseNode(ABC):
@@ -17,9 +17,9 @@ class BaseNodePool(ABC, Generic[N]):
     """Base class for all node pools"""
 
     def __init__(self):
-        self._nodes: Dict[str, N] = {}
+        self._nodes: dict[str, N] = {}
 
-    def get_root_ids(self) -> Set[str]:
+    def get_root_ids(self) -> set[str]:
         raise NotImplementedError
 
 NP = TypeVar("NP", bound=BaseNodePool)

@@ -4,12 +4,6 @@ from typing import Set
 from emmetify.config.html_config import HtmlConfig
 
 class EmmetifierConfig(BaseModel):
-    
-    # Optimization options
-    simplify_classes: bool = False
-    simplify_links: bool = False
-    simplify_images: bool = False
-    
     # Debug options
     debug: bool = False
 

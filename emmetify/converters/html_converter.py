@@ -1,7 +1,5 @@
-from typing import Dict
-
 from emmetify.config.base_config import EmmetifierConfig
-from emmetify.config.html_config import HtmlAttributePriority
+from emmetify.config.html_config import HtmlAttributesPriority
 from emmetify.converters.base_converter import BaseConverter
 from emmetify.nodes.html_nodes import HtmlNode, HtmlNodePool
 from emmetify.utils.tokens import SingleTokenNames
@@ -10,7 +8,7 @@ from emmetify.utils.tokens import SingleTokenNames
 class HtmlPriorityAttributeFilter:
     """Filters HTML attributes based on priority rules"""
 
-    def __init__(self, priority_config: HtmlAttributePriority):
+    def __init__(self, priority_config: HtmlAttributesPriority):
         self.config = priority_config
 
     def _is_data_attribute(self, attr: str) -> bool:
@@ -21,7 +19,7 @@ class HtmlPriorityAttributeFilter:
         """Check if attribute is an event handler"""
         return attr.startswith("on")
 
-    def filter_attributes(self, attrs: Dict[str, str]) -> Dict[str, str]:
+    def filter_attributes(self, attrs: dict[str, str]) -> dict[str, str]:
         """
         Filter attributes based on priority rules.
         Returns the most relevant attributes for LLM understanding and XPath creation.
@@ -60,7 +58,7 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         super().__init__(config)
 
         self.priority_filter = HtmlPriorityAttributeFilter(
-            config.html.attribute_priority
+            config.html.attributes_priority
         )
         self.single_token_names = SingleTokenNames()
 
@@ -88,19 +86,22 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         parts = [node.tag]
 
         # Filter attributes before processing
-        filtered_attrs = self.priority_filter.filter_attributes(node.attrs)
+        if self.config.html.prioritize_attributes:
+            attributes = self.priority_filter.filter_attributes(node.attrs)
+        else:
+            attributes = node.attrs
 
         # Process id if present
-        if "id" in filtered_attrs:
-            parts.append(f'#{filtered_attrs["id"]}')
+        if "id" in attributes:
+            parts.append(f'#{attributes["id"]}')
 
         # Process classes if present
-        if "class" in filtered_attrs:
-            emmet_class_name = f".{'.'.join(filtered_attrs['class'])}"
+        if "class" in attributes:
+            emmet_class_name = f".{'.'.join(attributes['class'])}"
             space_separated_class_name = " ".join(
-                filtered_attrs["class"]
+                attributes["class"]
             )  # for class map
-            if self.config.simplify_classes:
+            if self.config.html.simplify_classes:
                 mapped_class = self.classes_map.get(space_separated_class_name)
                 # the same class must be mapped to the same token
                 # because llm making wrong assumptions in xpath generation
@@ -115,28 +116,28 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
                 parts.append(emmet_class_name)
 
         # Process href for links
-        if self.config.simplify_links and "href" in filtered_attrs:
-            mapped_url = self.links_map.get(filtered_attrs["href"])
+        if self.config.html.simplify_links and "href" in attributes:
+            mapped_url = self.links_map.get(attributes["href"])
             if not mapped_url:
                 single_token_url = self.single_token_names.get_name()
-                self.links_map[filtered_attrs["href"]] = single_token_url
-                filtered_attrs["href"] = single_token_url
+                self.links_map[attributes["href"]] = single_token_url
+                attributes["href"] = single_token_url
             else:
-                filtered_attrs["href"] = mapped_url
+                attributes["href"] = mapped_url
 
         # Process src for images
-        if self.config.simplify_images and "src" in filtered_attrs:
-            mapped_src = self.images_map.get(filtered_attrs["src"])
+        if self.config.html.simplify_images and "src" in attributes:
+            mapped_src = self.images_map.get(attributes["src"])
             if not mapped_src:
                 single_token_src = self.single_token_names.get_name()
-                self.images_map[filtered_attrs["src"]] = single_token_src
-                filtered_attrs["src"] = single_token_src
+                self.images_map[attributes["src"]] = single_token_src
+                attributes["src"] = single_token_src
             else:
-                filtered_attrs["src"] = mapped_src
+                attributes["src"] = mapped_src
 
         # Remove id and class from remaining attributes since we've handled them
         remaining_attrs = {
-            k: v for k, v in filtered_attrs.items() if k not in ["id", "class"] and v
+            k: v for k, v in attributes.items() if k not in ["id", "class"] and v
         }
 
         # Add remaining filtered attributes
@@ -164,8 +165,8 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         node_emmet = self._node_to_emmet(node)
 
         # Get children nodes
-        children_nodes = []
-        text_node = None  # Text node should be single and not grouped
+        children_nodes: list[HtmlNode] = []
+        text_node: HtmlNode | None = None  # Text node should be single and not grouped
         for child_id in node.children_ids:
             child_node = node_pool.get_node(child_id)
             if child_node.is_text_node:

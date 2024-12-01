@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import Optional
 
 from bs4 import Tag
 
@@ -11,13 +10,13 @@ class HtmlNode(BaseNode):
     id: str
     tag: str
     attrs: dict
-    parent_id: Optional[str] = None
+    parent_id: str | None = None
     children_ids: list[str] = field(default_factory=list)
     sequence_index: int = 0
-    text_content: Optional[str] = None
+    text_content: str | None = None
     is_text_node: bool = False
-    next_sibling_id: Optional[str] = None
-    prev_sibling_id: Optional[str] = None
+    next_sibling_id: str | None = None
+    prev_sibling_id: str | None = None
 
     def __str__(self) -> str:
         """String representation of html node for printing."""
@@ -52,7 +51,7 @@ class HtmlNodePool(BaseNodePool[HtmlNode]):
         self._next_id += 1
         return f"n{self._next_id}"
 
-    def create_text_node(self, text: str, sequence_index: Optional[int] = None) -> str:
+    def create_text_node(self, text: str, sequence_index: int | None = None) -> str:
         """Create a node for text content."""
         new_id = self.get_next_id()
         if sequence_index is None:
@@ -88,7 +87,7 @@ class HtmlNodePool(BaseNodePool[HtmlNode]):
 
         return new_id
 
-    def get_node(self, node_id: str) -> Optional[HtmlNode]:
+    def get_node(self, node_id: str) -> HtmlNode | None:
         """Get node by ID."""
         return self._nodes.get(node_id)
 
@@ -116,7 +115,7 @@ class HtmlNodePool(BaseNodePool[HtmlNode]):
                     next_id = parent_node.children_ids[i + 1]
                     curr_node.next_sibling_id = next_id
 
-    def print_tree(self, node_id: Optional[str] = None, level: int = 0) -> None:
+    def print_tree(self, node_id: str | None = None, level: int = 0) -> None:
         """Pretty print the tree structure."""
         if node_id is None:
             print("\nTree Structure:")

@@ -1,5 +1,3 @@
-from typing import List
-
 from bs4 import BeautifulSoup, Comment, NavigableString, Tag
 
 from emmetify.config.base_config import EmmetifierConfig
@@ -12,9 +10,13 @@ class HtmlParser(BaseParser[HtmlNodePool]):
         super().__init__(config)
         self.node_pool = HtmlNodePool()
 
-    def _process_node_contents(self, node: Tag, node_pool: HtmlNodePool) -> List[str]:
+    def _process_node_contents(self, node: Tag, node_pool: HtmlNodePool) -> list[str]:
         content_ids = []
-        skip_tags = set(self.config.html.skip_tags)
+
+        if self.config.html.skip_tags:
+            skip_tags = set(self.config.html.tags_to_skip)
+        else:
+            skip_tags = set()
 
         for content in node.contents:
             # Skip comments
