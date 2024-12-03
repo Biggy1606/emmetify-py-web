@@ -165,27 +165,24 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         node_emmet = self._node_to_emmet(node)
 
         # Get children nodes
-        children_nodes: list[HtmlNode] = []
-        text_node: HtmlNode | None = None  # Text node should be single and not grouped
+        children_non_text_nodes: list[HtmlNode] = []
+        child_text_node: HtmlNode | None = None  # Text node should be single and not grouped
         for child_id in node.children_ids:
             child_node = node_pool.get_node(child_id)
             if child_node.is_text_node:
-                text_node = child_node
+                child_text_node = child_node
             else:
-                children_nodes.append(child_node)
+                children_non_text_nodes.append(child_node)
 
         # Emmetify children
         children_emmet: list[str] = []
-        for child_node in children_nodes:
+        for child_node in children_non_text_nodes:
             child_emmet = self._build_emmet(node_pool, child_node, level + 1)
-            if not child_node.is_text_node:
-                child_emmet = f"({child_emmet})"  # Wrap each non-text child in parentheses (without it emmet making wrong extensions)
             children_emmet.append(child_emmet)
 
         # Emmetify text node
-        text_node_emmet = self._node_to_emmet(text_node) if text_node else ""
+        text_node_emmet = self._node_to_emmet(child_text_node) if child_text_node else ""
 
-        # Join children
         if self.config.indent:
             children_emmet_str = "+\n".join(children_emmet)
         else:
@@ -193,13 +190,24 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
 
         if children_emmet_str:
             if self.config.indent:
-                children_group = f">(\n{children_emmet_str}\n{indent})"
+                children_group = f">\n{children_emmet_str}"
+                # children_group = f">(\n{children_emmet_str}\n{indent})"
             else:
-                children_group = f">({children_emmet_str})"
+                children_group = f">{children_emmet_str}"
+                # children_group = f">({children_emmet_str})"
         else:
             children_group = ""
 
-        return f"{indent}{node_emmet}{text_node_emmet}{children_group}"
+        sibilings_count = node_pool.get_siblings_count(node.id)
+        is_node_with_siblings_and_children = sibilings_count > 0 and len(children_non_text_nodes) > 0
+
+        node_emmet_str = ""
+        if is_node_with_siblings_and_children:
+            node_emmet_str = f"({node_emmet}{text_node_emmet}{children_group})"
+        else:
+            node_emmet_str = f"{node_emmet}{text_node_emmet}{children_group}"
+
+        return f"{indent}{node_emmet_str}"
 
     def convert(self, node_pool: HtmlNodePool) -> str:
         result = super().convert(node_pool)

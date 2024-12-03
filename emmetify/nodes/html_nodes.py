@@ -17,6 +17,8 @@ class HtmlNode(BaseNode):
     is_text_node: bool = False
     next_sibling_id: str | None = None
     prev_sibling_id: str | None = None
+    non_text_children_count: int = 0
+    # non_text_siblings_count: int = -1 # single child node has no siblings so will set to 0
 
     def __str__(self) -> str:
         """String representation of html node for printing."""
@@ -31,6 +33,10 @@ class HtmlNode(BaseNode):
             if self.text_content:
                 parts.append(f'"{self.text_content}"')
         return "".join(parts)
+    
+    def has_siblings(self) -> bool:
+        """Check if the node has siblings."""
+        return self.prev_sibling_id is not None or self.next_sibling_id is not None
 
 
 class HtmlNodePool(BaseNodePool[HtmlNode]):
@@ -106,14 +112,26 @@ class HtmlNodePool(BaseNodePool[HtmlNode]):
 
         # Update sibling relationships
         if parent_node.children_ids:
-            for i, cid in enumerate(parent_node.children_ids):
-                curr_node = self._nodes[cid]
-                if i > 0:
-                    prev_id = parent_node.children_ids[i - 1]
+            for index, child_id in enumerate(parent_node.children_ids):
+                curr_node = self._nodes[child_id]
+                if index > 0:
+                    prev_id = parent_node.children_ids[index - 1]
                     curr_node.prev_sibling_id = prev_id
-                if i < len(parent_node.children_ids) - 1:
-                    next_id = parent_node.children_ids[i + 1]
+                if index < len(parent_node.children_ids) - 1:
+                    next_id = parent_node.children_ids[index + 1]
                     curr_node.next_sibling_id = next_id
+
+        # Update non-text siblings count
+        if not child_node.is_text_node:
+            parent_node.non_text_children_count += 1
+
+    def get_siblings_count(self, node_id: str) -> int:
+        """Get number of siblings for a node."""
+        node = self._nodes[node_id]
+        parent = self._nodes.get(node.parent_id)
+        if parent:
+            return parent.non_text_children_count - 1 # exclude current node    
+        return 0
 
     def print_tree(self, node_id: str | None = None, level: int = 0) -> None:
         """Pretty print the tree structure."""
