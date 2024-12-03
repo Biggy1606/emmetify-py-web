@@ -8,15 +8,15 @@ from emmetify.parsers.base_parser import BaseParser
 class HtmlParser(BaseParser[HtmlNodePool]):
     def __init__(self, config: EmmetifierConfig):
         super().__init__(config)
-        self.node_pool = HtmlNodePool()
+        self.skip_tags = self._get_skip_tags()
+
+    def _get_skip_tags(self) -> set[str]:
+        if self.config.html.skip_tags:
+            return set(self.config.html.tags_to_skip)
+        return set()
 
     def _process_node_contents(self, node: Tag, node_pool: HtmlNodePool) -> list[str]:
         content_ids = []
-
-        if self.config.html.skip_tags:
-            skip_tags = set(self.config.html.tags_to_skip)
-        else:
-            skip_tags = set()
 
         for content in node.contents:
             # Skip comments
@@ -32,7 +32,7 @@ class HtmlParser(BaseParser[HtmlNodePool]):
 
             # Skip unnecessary tags
             elif isinstance(content, Tag):
-                if content.name not in skip_tags:
+                if content.name not in self.skip_tags:
                     tag_id = node_pool.get_or_create_node(content)
                     content_ids.append(tag_id)
 
@@ -46,7 +46,11 @@ class HtmlParser(BaseParser[HtmlNodePool]):
         """Build tree structure handling both text and tag nodes."""
         node_pool = HtmlNodePool()
 
-        root_tags = [tag for tag in soup.children if isinstance(tag, Tag)]
+        root_tags: list[Tag] = []
+        for tag in soup.children:
+            if isinstance(tag, Tag) and tag.name not in self.skip_tags:
+                root_tags.append(tag)
+
         for root_tag in root_tags:
             root_id = node_pool.get_or_create_node(root_tag, is_root=True)
             content_ids = self._process_node_contents(root_tag, node_pool)

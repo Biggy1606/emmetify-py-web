@@ -10,16 +10,7 @@ class Emmetifier:
         format: SupportedFormats = DefaultFormat,
         config: EmmetifierConfig | dict | None = None
     ):
-        # Handle config
-        self.config = (
-            EmmetifierConfig()
-            if config is None
-            else (
-                EmmetifierConfig.model_validate(config)
-                if isinstance(config, dict)
-                else config
-            )
-        )
+        self.config = EmmetifierConfig.model_validate(config) if config else EmmetifierConfig()
 
         self._parser = get_parser(format, self.config)
         self._converter = get_converter(format, self.config)
