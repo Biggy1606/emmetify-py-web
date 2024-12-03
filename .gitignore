@@ -169,3 +169,6 @@ cython_debug/
 # Other
 .scratch/
 .DS_Store
+
+# Debug
+tests/debug_test.py

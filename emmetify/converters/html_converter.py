@@ -142,7 +142,8 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
 
         # Add remaining filtered attributes
         if remaining_attrs:
-            attr_str = " ".join(f'{k}="{v}"' for k, v in remaining_attrs.items())
+            # if there are spaces in attribute value, it must be wrapped in quotes
+            attr_str = " ".join(f'{k}="{v}"' if " " in v else f'{k}={v}' for k, v in remaining_attrs.items())
             parts.append(f"[{attr_str}]")
 
         return "".join(parts)

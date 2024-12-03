@@ -45,7 +45,7 @@ class TestEmmetifierNoOptimization(BaseTestCase):
 
     def test_single_line_html(self):
         html = '<div id="main" class="container" data-test="ignore">Tytus Bomba</div>'
-        expected_abbr = 'div#main.container[data-test="ignore"]{Tytus Bomba}'
+        expected_abbr = 'div#main.container[data-test=ignore]{Tytus Bomba}'
         self.emmet_assert(self.emmetifier, html, expected_abbr)
 
     def test_multi_line_html(self):
@@ -55,7 +55,7 @@ class TestEmmetifierNoOptimization(BaseTestCase):
         <div id="main" class="container" data-test="ignore">
             Tytus Bomba
         </div>"""
-        expected_abbr = 'div#main.container[data-test="ignore"]{Tytus Bomba}+div#main.container[data-test="ignore"]{Tytus Bomba}'
+        expected_abbr = 'div#main.container[data-test=ignore]{Tytus Bomba}+div#main.container[data-test=ignore]{Tytus Bomba}'
         self.emmet_assert(self.emmetifier, html, expected_abbr)
 
     def test_simple_nested_structure(self):
@@ -64,7 +64,7 @@ class TestEmmetifierNoOptimization(BaseTestCase):
                 <li><a href="#home">Home</a></li>
             </ul>
         </nav>"""
-        expected_abbr = 'nav.menu>ul>li>a[href="#home"]{Home}'
+        expected_abbr = 'nav.menu>ul>li>a[href=#home]{Home}'
         self.emmet_assert(self.emmetifier, html, expected_abbr)
 
     def test_multiple_nested_structures(self):
@@ -79,5 +79,21 @@ class TestEmmetifierNoOptimization(BaseTestCase):
             </ul>
             <div id="3"></div>
         </nav>"""
-        expected_abbr = 'nav.menu>(ul>li#no-children+(li#children>div#2)+(li>a[href="#about"]{About}))+div#3'
+        expected_abbr = 'nav.menu>(ul>li#no-children+(li#children>div#2)+(li>a[href=#about]{About}))+div#3'
+        self.emmet_assert(self.emmetifier, html, expected_abbr)
+
+    def test_attributes_order(self):
+        html = """<div id="main" class="container" data-test="ignore" data-test2="ignore2">
+            Tytus Bomba
+        </div><div id="main" class="container" data-test="ignore" data-test2="ignore2">
+            Tytus Bomba
+        </div>"""
+        expected_abbr = 'div#main.container[data-test=ignore data-test2=ignore2]{Tytus Bomba}+div#main.container[data-test=ignore data-test2=ignore2]{Tytus Bomba}'
+        self.emmet_assert(self.emmetifier, html, expected_abbr)
+
+    def test_attributes_with_spaces(self):
+        html = """<div id="main" class="container" data-test="ignore" data-test2="ignore 2">
+            Tytus Bomba
+        </div><a href="https://example.com">Link</a>"""
+        expected_abbr = 'div#main.container[data-test=ignore data-test2="ignore 2"]{Tytus Bomba}+a[href=https://example.com]{Link}'
         self.emmet_assert(self.emmetifier, html, expected_abbr)
