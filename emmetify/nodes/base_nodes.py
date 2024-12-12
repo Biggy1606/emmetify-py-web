@@ -22,4 +22,5 @@ class BaseNodePool(ABC, Generic[N]):
     def get_root_ids(self) -> set[str]:
         raise NotImplementedError
 
+
 NP = TypeVar("NP", bound=BaseNodePool)

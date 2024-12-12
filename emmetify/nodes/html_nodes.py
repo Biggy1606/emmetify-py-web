@@ -33,7 +33,7 @@ class HtmlNode(BaseNode):
             if self.text_content:
                 parts.append(f'"{self.text_content}"')
         return "".join(parts)
-    
+
     def has_siblings(self) -> bool:
         """Check if the node has siblings."""
         return self.prev_sibling_id is not None or self.next_sibling_id is not None
@@ -130,7 +130,7 @@ class HtmlNodePool(BaseNodePool[HtmlNode]):
         node = self._nodes[node_id]
         parent = self._nodes.get(node.parent_id)
         if parent:
-            return parent.non_text_children_count - 1 # exclude current node    
+            return parent.non_text_children_count - 1  # exclude current node
         return 0
 
     def print_tree(self, node_id: str | None = None, level: int = 0) -> None:

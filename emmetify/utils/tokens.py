@@ -1,5 +1,6 @@
 from emmetify.data import load_single_token_names
 
+
 class SingleTokenNames:
     """List of english first names that are single tokens in most LLMs."""
 

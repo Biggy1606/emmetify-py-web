@@ -1,4 +1,3 @@
-
 from typing import Dict
 from emmetify.config.base_config import EmmetifierConfig
 from emmetify.converters.base_converter import BaseConverter
@@ -7,7 +6,9 @@ from emmetify.nodes.base_nodes import BaseNodePool
 from emmetify.types import SupportedFormats, DefaultFormat
 
 
-def get_converter(format: SupportedFormats, config: EmmetifierConfig) -> BaseConverter[BaseNodePool]:
+def get_converter(
+    format: SupportedFormats, config: EmmetifierConfig
+) -> BaseConverter[BaseNodePool]:
     converters: Dict[SupportedFormats, BaseConverter[BaseNodePool]] = {
         "html": HtmlConverter(config),
     }

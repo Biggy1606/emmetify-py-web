@@ -70,8 +70,8 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         """Escape * and $ in text content."""
         escape_chars = {
             "\\": "\\\\",
-            "*": "\*",
-            "$": "\$",
+            "*": r"\*",
+            "$": r"\$",
         }
         escaped = text.translate(str.maketrans(escape_chars))
         no_white_chars = " ".join(escaped.split())
@@ -98,14 +98,12 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         # Process classes if present
         if "class" in attributes:
             emmet_class_name = f".{'.'.join(attributes['class'])}"
-            space_separated_class_name = " ".join(
-                attributes["class"]
-            )  # for class map
+            space_separated_class_name = " ".join(attributes["class"])  # for class map
             if self.config.html.simplify_classes:
                 mapped_class = self.classes_map.get(space_separated_class_name)
                 # the same class must be mapped to the same token
                 # because llm making wrong assumptions in xpath generation
-                # and making simpler xpath for the same class names (because it see it as diferent tokens)
+                # and often mix classes on xpath selectors
                 if not mapped_class:
                     single_token_class = self.single_token_names.get_name()
                     self.classes_map[space_separated_class_name] = single_token_class
@@ -143,7 +141,10 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         # Add remaining filtered attributes
         if remaining_attrs:
             # if there are spaces in attribute value, it must be wrapped in quotes
-            attr_str = " ".join(f'{k}="{v}"' if " " in v else f'{k}={v}' for k, v in remaining_attrs.items())
+            attr_str = " ".join(
+                f'{k}="{v}"' if " " in v else f"{k}={v}"
+                for k, v in remaining_attrs.items()
+            )
             parts.append(f"[{attr_str}]")
 
         return "".join(parts)
@@ -167,7 +168,9 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
 
         # Get children nodes
         children_non_text_nodes: list[HtmlNode] = []
-        child_text_node: HtmlNode | None = None  # Text node should be single and not grouped
+        child_text_node: HtmlNode | None = (
+            None  # Text node should be single and not grouped
+        )
         for child_id in node.children_ids:
             child_node = node_pool.get_node(child_id)
             if child_node.is_text_node:
@@ -182,7 +185,9 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
             children_emmet.append(child_emmet)
 
         # Emmetify text node
-        text_node_emmet = self._node_to_emmet(child_text_node) if child_text_node else ""
+        text_node_emmet = (
+            self._node_to_emmet(child_text_node) if child_text_node else ""
+        )
 
         if self.config.indent:
             children_emmet_str = "+\n".join(children_emmet)
@@ -200,7 +205,9 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
             children_group = ""
 
         sibilings_count = node_pool.get_siblings_count(node.id)
-        is_node_with_siblings_and_children = sibilings_count > 0 and len(children_non_text_nodes) > 0
+        is_node_with_siblings_and_children = (
+            sibilings_count > 0 and len(children_non_text_nodes) > 0
+        )
 
         node_emmet_str = ""
         if is_node_with_siblings_and_children:
