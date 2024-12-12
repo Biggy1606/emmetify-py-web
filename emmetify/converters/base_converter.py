@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import Generic
 
 from emmetify.nodes.base_nodes import NP
@@ -19,7 +19,7 @@ class BaseConverter(Generic[NP]):
         root_ids = node_pool.get_root_ids()
 
         if not root_ids:
-            return ''
+            return ""
 
         emmet_parts = []
         sorted_root_ids = sorted(root_ids)
@@ -32,11 +32,11 @@ class BaseConverter(Generic[NP]):
                     else:
                         emmet = f"{emmet}+"
                 emmet_parts.append(emmet)
-        
+
         # Join multiple root elements
-        result = ''.join(emmet_parts)
+        result = "".join(emmet_parts)
 
         # if self.config.debug:
-            # print("\nEmmet notation:")
-            # print(result)
+        # print("\nEmmet notation:")
+        # print(result)
         return result
