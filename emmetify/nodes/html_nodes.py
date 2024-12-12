@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from bs4 import Tag
 
 from emmetify.nodes.base_nodes import BaseNode, BaseNodePool
+from emmetify.types import StrOrNoneType, IntOrNoneType
 
 
 @dataclass
@@ -10,13 +11,13 @@ class HtmlNode(BaseNode):
     id: str
     tag: str
     attrs: dict
-    parent_id: str | None = None
+    parent_id: StrOrNoneType = None
     children_ids: list[str] = field(default_factory=list)
     sequence_index: int = 0
-    text_content: str | None = None
+    text_content: StrOrNoneType = None
     is_text_node: bool = False
-    next_sibling_id: str | None = None
-    prev_sibling_id: str | None = None
+    next_sibling_id: StrOrNoneType = None
+    prev_sibling_id: StrOrNoneType = None
     non_text_children_count: int = 0
     # non_text_siblings_count: int = -1 # single child node has no siblings so will set to 0
 
@@ -57,7 +58,7 @@ class HtmlNodePool(BaseNodePool[HtmlNode]):
         self._next_id += 1
         return f"n{self._next_id}"
 
-    def create_text_node(self, text: str, sequence_index: int | None = None) -> str:
+    def create_text_node(self, text: str, sequence_index: IntOrNoneType = None) -> str:
         """Create a node for text content."""
         new_id = self.get_next_id()
         if sequence_index is None:
@@ -133,7 +134,7 @@ class HtmlNodePool(BaseNodePool[HtmlNode]):
             return parent.non_text_children_count - 1  # exclude current node
         return 0
 
-    def print_tree(self, node_id: str | None = None, level: int = 0) -> None:
+    def print_tree(self, node_id: StrOrNoneType = None, level: IntOrNoneType = None) -> None:
         """Pretty print the tree structure."""
         if node_id is None:
             print("\nTree Structure:")
