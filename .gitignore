@@ -162,9 +162,13 @@ cython_debug/
 #.idea/
 
 # AI
+.cursorignore
 .aider*
 .ref
 
+# Other
+.scratch/
+.DS_Store
 
-# RepoAtlas
-desc.json
+# Debug
+tests/debug_test.py
