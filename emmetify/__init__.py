@@ -2,7 +2,7 @@ from emmetify.emmetifier import Emmetifier
 from emmetify.config import __all__ as config_all
 
 
-def emmetify(content, format="html", **options):
+def emmetify_html(content, format="html", **options):
     """Convenience function for quick conversions"""
     emmetifier = Emmetifier(format=format, **options)
     return emmetifier.emmetify(content)
@@ -27,7 +27,7 @@ def emmetify_compact_html(content):
 
 __all__ = [
     "Emmetifier",
-    "emmetify",
+    "emmetify_html",
     "emmetify_compact_html",
     *config_all,
 ]
