@@ -1,3 +1,4 @@
+from typing import Union
 from dataclasses import dataclass, field
 
 from bs4 import Tag
@@ -93,7 +94,7 @@ class HtmlNodePool(BaseNodePool[HtmlNode]):
 
         return new_id
 
-    def get_node(self, node_id: str) -> HtmlNode | None:
+    def get_node(self, node_id: str) -> Union[HtmlNode, None]:
         """Get node by ID."""
         return self._nodes.get(node_id)
 
