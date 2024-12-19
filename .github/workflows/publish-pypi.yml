@@ -1,0 +1,74 @@
+name: Publish PyPI
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: "ubuntu-24.04"
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: 'pip'
+      
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: latest
+      
+      - uses: actions/cache@v3
+        name: Define a cache for the virtual environment based on the dependencies lock file
+        with:
+          path: ./.venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            venv-
+      
+      - name: Install the project dependencies
+        run: poetry install
+      
+      - name: Build package
+        run: poetry build
+      
+      - name: Verify package
+        run: |
+          pip install twine
+          twine check dist/*
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  publish:
+    needs: build
+    runs-on: "ubuntu-24.04"
+    permissions:
+      contents: read
+      id-token: write  # Needed for trusted publishing
+    environment:
+      name: pypi
+      url: https://pypi.org/p/emmetify
+    
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verbose: true
+          print-hash: true
