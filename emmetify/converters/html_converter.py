@@ -135,16 +135,24 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
 
         # Remove id and class from remaining attributes since we've handled them
         remaining_attrs = {
-            k: v for k, v in attributes.items() if k not in ["id", "class"] and v
+            k: v for k, v in attributes.items() if k not in ["id", "class"]
         }
+
+        if self.config.html.skip_empty_attributes:
+            remaining_attrs = {k: v for k, v in remaining_attrs.items() if v}
 
         # Add remaining filtered attributes
         if remaining_attrs:
             # if there are spaces in attribute value, it must be wrapped in quotes
-            attr_str = " ".join(
-                f'{k}="{v}"' if " " in v else f"{k}={v}"
-                for k, v in remaining_attrs.items()
-            )
+            attr_str_list = []
+            for k, v in remaining_attrs.items():
+                if " " in v:
+                    attr_str_list.append(f'{k}="{v}"')
+                elif v == "":
+                    attr_str_list.append(k)
+                else:
+                    attr_str_list.append(f"{k}={v}")
+            attr_str = " ".join(attr_str_list)
             parts.append(f"[{attr_str}]")
 
         return "".join(parts)
@@ -167,26 +175,31 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         node_emmet = self._node_to_emmet(node)
 
         # Get children nodes
-        children_non_text_nodes: list[HtmlNode] = []
-        child_text_node: HtmlNode | None = (
-            None  # Text node should be single and not grouped
-        )
-        for child_id in node.children_ids:
+        children_nodes: list[HtmlNode] = []
+        direct_text_child_node: HtmlNode | None = None
+        for child_index, child_id in enumerate(node.children_ids):
             child_node = node_pool.get_node(child_id)
-            if child_node.is_text_node:
-                child_text_node = child_node
+            is_first_text_child = (
+                child_node.is_text_node
+                and child_index == 0
+                and not direct_text_child_node
+            )
+            if is_first_text_child:
+                direct_text_child_node = child_node
             else:
-                children_non_text_nodes.append(child_node)
+                children_nodes.append(child_node)
 
         # Emmetify children
         children_emmet: list[str] = []
-        for child_node in children_non_text_nodes:
+        for child_node in children_nodes:
             child_emmet = self._build_emmet(node_pool, child_node, level + 1)
             children_emmet.append(child_emmet)
 
-        # Emmetify text node
+        # Emmetify direct text child node
         text_node_emmet = (
-            self._node_to_emmet(child_text_node) if child_text_node else ""
+            self._node_to_emmet(direct_text_child_node)
+            if direct_text_child_node
+            else ""
         )
 
         if self.config.indent:
@@ -197,16 +210,14 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         if children_emmet_str:
             if self.config.indent:
                 children_group = f">\n{children_emmet_str}"
-                # children_group = f">(\n{children_emmet_str}\n{indent})"
             else:
                 children_group = f">{children_emmet_str}"
-                # children_group = f">({children_emmet_str})"
         else:
             children_group = ""
 
         sibilings_count = node_pool.get_siblings_count(node.id)
         is_node_with_siblings_and_children = (
-            sibilings_count > 0 and len(children_non_text_nodes) > 0
+            sibilings_count > 0 and len(children_nodes) > 0
         )
 
         node_emmet_str = ""

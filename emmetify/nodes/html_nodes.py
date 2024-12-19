@@ -1,3 +1,4 @@
+from typing import Union
 from dataclasses import dataclass, field
 
 from bs4 import Tag
@@ -19,7 +20,6 @@ class HtmlNode(BaseNode):
     next_sibling_id: StrOrNoneType = None
     prev_sibling_id: StrOrNoneType = None
     non_text_children_count: int = 0
-    # non_text_siblings_count: int = -1 # single child node has no siblings so will set to 0
 
     def __str__(self) -> str:
         """String representation of html node for printing."""
@@ -94,7 +94,7 @@ class HtmlNodePool(BaseNodePool[HtmlNode]):
 
         return new_id
 
-    def get_node(self, node_id: str) -> HtmlNode | None:
+    def get_node(self, node_id: str) -> Union[HtmlNode, None]:
         """Get node by ID."""
         return self._nodes.get(node_id)
 

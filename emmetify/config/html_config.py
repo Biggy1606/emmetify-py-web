@@ -51,6 +51,7 @@ class HtmlConfig(BaseModel):
     simplify_links: bool = False
     simplify_images: bool = False
     skip_tags: bool = False
+    skip_empty_attributes: bool = False
     prioritize_attributes: bool = False
 
     # Tags to skip during conversion
