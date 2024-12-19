@@ -46,9 +46,7 @@ class HtmlPriorityAttributeFilter:
             return primary_attrs_present
 
         # Otherwise, keep secondary attributes
-        return {
-            k: v for k, v in filtered_attrs.items() if k in self.config.secondary_attrs
-        }
+        return {k: v for k, v in filtered_attrs.items() if k in self.config.secondary_attrs}
 
 
 class HtmlConverter(BaseConverter[HtmlNodePool]):
@@ -57,9 +55,7 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
     def __init__(self, config: EmmetifierConfig):
         super().__init__(config)
 
-        self.priority_filter = HtmlPriorityAttributeFilter(
-            config.html.attributes_priority
-        )
+        self.priority_filter = HtmlPriorityAttributeFilter(config.html.attributes_priority)
         self.single_token_names = SingleTokenNames()
 
         self.classes_map: dict[str, str] = {}
@@ -134,9 +130,7 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
                 attributes["src"] = mapped_src
 
         # Remove id and class from remaining attributes since we've handled them
-        remaining_attrs = {
-            k: v for k, v in attributes.items() if k not in ["id", "class"]
-        }
+        remaining_attrs = {k: v for k, v in attributes.items() if k not in ["id", "class"]}
 
         if self.config.html.skip_empty_attributes:
             remaining_attrs = {k: v for k, v in remaining_attrs.items() if v}
@@ -180,9 +174,7 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         for child_index, child_id in enumerate(node.children_ids):
             child_node = node_pool.get_node(child_id)
             is_first_text_child = (
-                child_node.is_text_node
-                and child_index == 0
-                and not direct_text_child_node
+                child_node.is_text_node and child_index == 0 and not direct_text_child_node
             )
             if is_first_text_child:
                 direct_text_child_node = child_node
@@ -197,9 +189,7 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
 
         # Emmetify direct text child node
         text_node_emmet = (
-            self._node_to_emmet(direct_text_child_node)
-            if direct_text_child_node
-            else ""
+            self._node_to_emmet(direct_text_child_node) if direct_text_child_node else ""
         )
 
         if self.config.indent:
@@ -216,9 +206,7 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
             children_group = ""
 
         sibilings_count = node_pool.get_siblings_count(node.id)
-        is_node_with_siblings_and_children = (
-            sibilings_count > 0 and len(children_nodes) > 0
-        )
+        is_node_with_siblings_and_children = sibilings_count > 0 and len(children_nodes) > 0
 
         node_emmet_str = ""
         if is_node_with_siblings_and_children:

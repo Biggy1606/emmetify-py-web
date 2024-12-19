@@ -1,6 +1,7 @@
 import unittest
-from emmet import expand as expand_emmet
+
 from bs4 import BeautifulSoup
+from emmet import expand as expand_emmet
 
 
 class BaseEmmetTestCase(unittest.TestCase):
@@ -15,6 +16,4 @@ class BaseEmmetTestCase(unittest.TestCase):
         reversed_html = expand_emmet(expected_abbr)
         pretty_expected = BeautifulSoup(expected_html, "html.parser").prettify()
         pretty_reversed = BeautifulSoup(reversed_html, "html.parser").prettify()
-        self.assertEqual(
-            pretty_expected, pretty_reversed, "Reverse emmetified result is incorrect"
-        )
+        self.assertEqual(pretty_expected, pretty_reversed, "Reverse emmetified result is incorrect")

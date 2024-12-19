@@ -24,9 +24,7 @@ class TestHtmlConverterTextNodes(BaseEmmetTestCase):
         node_pool = parser.parse(input_html)
         result = converter.convert(node_pool)
 
-        expected_result = (
-            r"div{Text with \* asterisk, \$ dollar, { curly }, [ square ], + plus}"
-        )
+        expected_result = r"div{Text with \* asterisk, \$ dollar, { curly }, [ square ], + plus}"
         self.assertEqual(expected_result, result["result"])
         self.emmet_reverse_assert(input_html, result)
 
@@ -75,9 +73,7 @@ class TestHtmlConverterTextNodes(BaseEmmetTestCase):
         node_pool = parser.parse(input_html)
         result = converter.convert(node_pool)
 
-        expected_result = (
-            "div{First text}>span{Middle}+{Second text}+span{End}+{Last text}"
-        )
+        expected_result = "div{First text}>span{Middle}+{Second text}+span{End}+{Last text}"
         self.assertEqual(expected_result, result["result"])
         self.emmet_reverse_assert(input_html, result)
 
@@ -122,9 +118,7 @@ class TestHtmlConverterTextNodes(BaseEmmetTestCase):
         result = converter.convert(node_pool)
 
         # Whitespace should be normalized but preserved
-        expected_result = (
-            "div{Text with multiple spaces}>span{Indented text}+{More spaces}"
-        )
+        expected_result = "div{Text with multiple spaces}>span{Indented text}+{More spaces}"
         self.assertEqual(expected_result, result["result"])
         self.emmet_reverse_assert(input_html, result)
 
@@ -161,7 +155,9 @@ class TestHtmlConverterTextNodes(BaseEmmetTestCase):
         node_pool = parser.parse(input_html)
         result = converter.convert(node_pool)
 
-        expected_result = "ul{Text before list}>li{First item}+{Between items}+li{Second item}+{After items}"
+        expected_result = (
+            "ul{Text before list}>li{First item}+{Between items}+li{Second item}+{After items}"
+        )
         self.assertEqual(expected_result, result["result"])
         self.emmet_reverse_assert(input_html, result)
 
@@ -238,9 +234,7 @@ class TestHtmlConverterTextNodes(BaseEmmetTestCase):
         node_pool = parser.parse(input_html)
         result = converter.convert(node_pool)
 
-        expected_result = (
-            "div{Math: 2 × 3 ÷ 4 ≠ 5 ± 6 ≤ 7 ≥ 8 ≈ 9}>span{More: ∑(x²) = ∞}"
-        )
+        expected_result = "div{Math: 2 × 3 ÷ 4 ≠ 5 ± 6 ≤ 7 ≥ 8 ≈ 9}>span{More: ∑(x²) = ∞}"
         self.assertEqual(expected_result, result["result"])
         self.emmet_reverse_assert(input_html, result)
 
@@ -284,8 +278,6 @@ class TestHtmlConverterTextNodes(BaseEmmetTestCase):
         node_pool = parser.parse(input_html)
         result = converter.convert(node_pool)
 
-        expected_result = (
-            "p{Start text}>strong{bold}+{middle text}+em{italic}+{end text}"
-        )
+        expected_result = "p{Start text}>strong{bold}+{middle text}+em{italic}+{end text}"
         self.assertEqual(expected_result, result["result"])
         self.emmet_reverse_assert(input_html, result)

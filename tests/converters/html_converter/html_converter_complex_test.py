@@ -39,9 +39,7 @@ class TestHtmlConverterComplexCases(BaseEmmetTestCase):
         node_pool = parser.parse(input_html)
         result = converter.convert(node_pool)
 
-        expected_result = (
-            "div.token1>div.token2>div.token3>div.token4{Deep nested content}"
-        )
+        expected_result = "div.token1>div.token2>div.token3>div.token4{Deep nested content}"
         self.assertEqual(expected_result, result["result"])
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
