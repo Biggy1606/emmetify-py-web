@@ -197,7 +197,9 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
 
         # Emmetify direct text child node
         text_node_emmet = (
-            self._node_to_emmet(direct_text_child_node) if direct_text_child_node else ""
+            self._node_to_emmet(direct_text_child_node)
+            if direct_text_child_node
+            else ""
         )
 
         if self.config.indent:

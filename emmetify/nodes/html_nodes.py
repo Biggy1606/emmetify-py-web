@@ -19,7 +19,6 @@ class HtmlNode(BaseNode):
     next_sibling_id: StrOrNoneType = None
     prev_sibling_id: StrOrNoneType = None
     non_text_children_count: int = 0
-    # non_text_siblings_count: int = -1 # single child node has no siblings so will set to 0
 
     def __str__(self) -> str:
         """String representation of html node for printing."""
