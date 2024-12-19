@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import Mock, patch
 from emmet import expand as expand_emmet
 from bs4 import BeautifulSoup
 

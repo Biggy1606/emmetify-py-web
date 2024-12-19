@@ -1,5 +1,3 @@
-import unittest
-
 from emmetify.config.base_config import EmmetifierConfig
 from emmetify.converters.html_converter import HtmlConverter
 from emmetify.parsers.html_parser import HtmlParser
