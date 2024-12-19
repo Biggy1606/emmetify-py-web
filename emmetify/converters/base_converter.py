@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from typing import Generic
 
-from emmetify.nodes.base_nodes import NP
 from emmetify.config.base_config import EmmetifierConfig
+from emmetify.nodes.base_nodes import NP
 
 
 class BaseConverter(Generic[NP]):

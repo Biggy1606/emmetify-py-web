@@ -1,5 +1,7 @@
-from emmetify.emmetifier import Emmetifier
+from importlib import metadata
+
 from emmetify.config import __all__ as config_all
+from emmetify.emmetifier import Emmetifier
 
 
 def emmetify_html(content, format="html", **options):
@@ -31,3 +33,5 @@ __all__ = [
     "emmetify_compact_html",
     *config_all,
 ]
+
+__version__ = metadata.version("emmetify")

@@ -1,3 +1,6 @@
 [flake8]
 ignore = W503
 max-line-length = 100
+exclude = .git,__pycache__,build,dist,.venv
+# TODO: Decrease complexity to 10
+max-complexity = 20

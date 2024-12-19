@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import Mock, patch
-from emmet import expand as expand_emmet
+
 from bs4 import BeautifulSoup
+from emmet import expand as expand_emmet
 
 from emmetify import Emmetifier
 from emmetify.config.base_config import EmmetifierConfig
@@ -34,9 +35,7 @@ class BaseTestCase(unittest.TestCase):
             pretty_reversed,
             "\n\n",
         )
-        self.assertEqual(
-            pretty_expected, pretty_reversed, "Reverse emmetified result is incorrect"
-        )
+        self.assertEqual(pretty_expected, pretty_reversed, "Reverse emmetified result is incorrect")
 
     def emmetify_assert(
         self,
@@ -103,7 +102,9 @@ class TestEmmetifierNoOptimization(BaseTestCase):
                 <div id="3"></div>
             </nav>
         """
-        expected_abbr = "nav.menu>(ul>li#no-children+(li#children>div#2)+(li>a[href=#about]{About}))+div#3"
+        expected_abbr = (
+            "nav.menu>(ul>li#no-children+(li#children>div#2)+(li>a[href=#about]{About}))+div#3"
+        )
         self.emmetify_assert(self.emmetifier, input_html, expected_abbr)
         self.reverse_assert(input_html, expected_abbr)
 
@@ -134,9 +135,7 @@ class TestEmmetifierNoOptimization(BaseTestCase):
 
 class TestEmmetifierWithSkipTags(BaseTestCase):
     def setUp(self):
-        self.emmetifier = Emmetifier(
-            config=EmmetifierConfig(html=HtmlConfig(skip_tags=True))
-        )
+        self.emmetifier = Emmetifier(config=EmmetifierConfig(html=HtmlConfig(skip_tags=True)))
 
     def test_skip_tags_when_root_tag(self):
         input_html = """

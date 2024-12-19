@@ -57,9 +57,7 @@ class TestHtmlConverterWithImageOptimization(BaseEmmetTestCase):
             "token1": "/images/first.jpg",
             "token2": "/images/second.jpg",
         }
-        expected_result = (
-            'div>img[src=token1 alt="First image"]+img[src=token2 alt="Second image"]'
-        )
+        expected_result = 'div>img[src=token1 alt="First image"]+img[src=token2 alt="Second image"]'
         self.assertEqual(expected_images_map, result["maps"]["images"])
         self.assertEqual(expected_result, result["result"])
 

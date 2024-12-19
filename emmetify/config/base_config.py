@@ -11,6 +11,4 @@ class EmmetifierConfig(BaseModel):
     indent: bool = False
     indent_size: int = Field(default=2, ge=1, le=8)
 
-    html: HtmlConfig = Field(
-        default_factory=HtmlConfig, description="HTML-specific configuration"
-    )
+    html: HtmlConfig = Field(default_factory=HtmlConfig, description="HTML-specific configuration")

@@ -1,10 +1,10 @@
-from typing import Union
 from dataclasses import dataclass, field
+from typing import Union
 
 from bs4 import Tag
 
 from emmetify.nodes.base_nodes import BaseNode, BaseNodePool
-from emmetify.types import StrOrNoneType, IntOrNoneType
+from emmetify.types import IntOrNoneType, StrOrNoneType
 
 
 @dataclass
