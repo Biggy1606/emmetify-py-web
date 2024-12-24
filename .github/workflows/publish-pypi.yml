@@ -24,6 +24,7 @@ jobs:
         with:
           poetry-version: latest
       
+      # Upload cache takes longer than the build itself, so we don't need it for now
       # - uses: actions/cache@v3
       #   name: Define a cache for the virtual environment based on the dependencies lock file
       #   with:
