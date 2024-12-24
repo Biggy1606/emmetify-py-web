@@ -2,6 +2,8 @@
 
 [![pypi](https://img.shields.io/pypi/v/emmetify.svg)](https://pypi.python.org/pypi/emmetify)
 [![versions](https://img.shields.io/pypi/pyversions/emmetify.svg)](https://github.com/emmetify/emmetify-py)
+[![PyPI Downloads](https://static.pepy.tech/badge/emmetify)](https://pepy.tech/projects/emmetify)
+[![codecov](https://codecov.io/gh/emmetify/emmetify-py/graph/badge.svg?token=GY70C7TMD8)](https://codecov.io/gh/emmetify/emmetify-py)
 [![license](https://img.shields.io/github/license/emmetify/emmetify-py.svg)](https://github.com/emmetify/emmetify-py/blob/main/LICENSE)
 
 Cut your LLM processing costs by up to 90% by transforming verbose HTML into efficient Emmet notation, without losing structural integrity.

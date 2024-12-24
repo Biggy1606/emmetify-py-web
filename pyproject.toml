@@ -3,6 +3,7 @@ name = "emmetify"
 version = "0.0.1-rc.4"
 description = "Cut LLM costs and boost processing speed by transforming verbose HTML into efficient Emmet notation"
 authors = ["Mariusz Korzekwa <mariusz@korzekwa.dev>"]
+repository = "https://github.com/emmetify/emmetify-py"
 license = "Apache-2.0"
 readme = "README.md"
 classifiers = [
@@ -24,7 +25,7 @@ classifiers = [
 python = ">=3.9"
 beautifulsoup4 = "^4.12.3"
 lxml = "^5.3.0"
-pydantic = "^2.10.1"
+pydantic = "^2.10.4"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"

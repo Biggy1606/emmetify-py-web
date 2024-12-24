@@ -17,4 +17,4 @@ run_quality_checks:
 	poetry run flake8 emmetify
 
 run_tests:
-	poetry run pytest
+	poetry run pytest -v --cov=emmetify
