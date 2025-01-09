@@ -32,14 +32,14 @@ Emmetify converts complex HTML structures into concise Emmet notation. For examp
 ```
 Becomes:
 ```
-div.container>header.header>nav.nav>ul.nav-list>li.nav-item>a[href=#]
+div.container>header.header>nav.nav>ul.nav-list>li.nav-item>a[href=#]{Link}
 ```
 
 Using the [OpenAI Tokenizer](https://platform.openai.com/tokenizer), we can see this simple transformation reduces token count from:
 - HTML: 59 tokens
-- Emmet: 20 tokens
+- Emmet: 22 tokens
 
-That's 66% fewer tokens while preserving all structural information! And this is just with default settings.
+That's 63% fewer tokens while preserving all structural information! And this is just with default settings.
 
 You can achieve even higher compression rates (up to 90%, or even more depending on the HTML structure) by using advanced configuration options:
 - Removing unnecessary tags
@@ -136,6 +136,11 @@ response = llm.chat.completions.create(
     messages=[{"role": "user", "content": emmet}],
 )
 ```
+
+## Backlog 📝
+
+- [x] Add support for HTML
+- [ ] Add examples
 
 ## Supported Formats 📊
 

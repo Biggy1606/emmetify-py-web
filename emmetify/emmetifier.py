@@ -1,3 +1,5 @@
+from typing import Union
+
 from emmetify.config import EmmetifierConfig
 from emmetify.converters import get_converter
 from emmetify.parsers import get_parser
@@ -8,7 +10,7 @@ class Emmetifier:
     def __init__(
         self,
         format: SupportedFormats = DefaultFormat,
-        config: EmmetifierConfig | dict | None = None,
+        config: Union[EmmetifierConfig, dict, None] = None,
     ):
         self.config = EmmetifierConfig.model_validate(config) if config else EmmetifierConfig()
 

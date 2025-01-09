@@ -1,3 +1,5 @@
+from typing import Union
+
 from emmetify.config.base_config import EmmetifierConfig
 from emmetify.config.html_config import HtmlAttributesPriority
 from emmetify.converters.base_converter import BaseConverter
@@ -152,7 +154,7 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
         return "".join(parts)
 
     def _build_emmet(
-        self, node_pool: HtmlNodePool, node_data: str | HtmlNode, level: int = 0
+        self, node_pool: HtmlNodePool, node_data: Union[str, HtmlNode], level: int = 0
     ) -> str:
         """Recursively build Emmet notation with optional indentation."""
         indent = " " * (self.config.indent_size * level) if self.config.indent else ""
@@ -170,7 +172,7 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
 
         # Get children nodes
         children_nodes: list[HtmlNode] = []
-        direct_text_child_node: HtmlNode | None = None
+        direct_text_child_node: Union[HtmlNode, None] = None
         for child_index, child_id in enumerate(node.children_ids):
             child_node = node_pool.get_node(child_id)
             is_first_text_child = (
