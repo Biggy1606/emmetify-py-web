@@ -125,7 +125,7 @@ emmetifier = Emmetifier(config={
 
 # Fetch and process HTML
 html = requests.get("https://example.com").text
-result = emmetifier.emmetify(html)["result"]
+result = emmetifier.emmetify(html).result
 print(result)
 
 # Use with your favorite LLM

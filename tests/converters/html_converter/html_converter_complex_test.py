@@ -40,7 +40,7 @@ class TestHtmlConverterComplexCases(BaseEmmetTestCase):
         result = converter.convert(node_pool)
 
         expected_result = "div.token1>div.token2>div.token3>div.token4{Deep nested content}"
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_mixed_content(self, mock_single_token_names):
@@ -69,14 +69,14 @@ class TestHtmlConverterComplexCases(BaseEmmetTestCase):
         result = converter.convert(node_pool)
         expected_result = "div.token1>h1.token2{Hello}+{Some text}+a.token3[href=token4]{Click}+img.token5[src=token6 alt=Test]"
 
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_result, result.result)
 
-        self.assertEqual("container", result["maps"]["classes"]["token1"])
-        self.assertEqual("title", result["maps"]["classes"]["token2"])
-        self.assertEqual("link", result["maps"]["classes"]["token3"])
-        self.assertEqual("image", result["maps"]["classes"]["token5"])
-        self.assertEqual("https://example.com", result["maps"]["links"]["token4"])
-        self.assertEqual("/test.jpg", result["maps"]["images"]["token6"])
+        self.assertEqual("container", result.maps.classes["token1"])
+        self.assertEqual("title", result.maps.classes["token2"])
+        self.assertEqual("link", result.maps.classes["token3"])
+        self.assertEqual("image", result.maps.classes["token5"])
+        self.assertEqual("https://example.com", result.maps.links["token4"])
+        self.assertEqual("/test.jpg", result.maps.images["token6"])
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_siblings_with_text(self, mock_single_token_names):
@@ -97,7 +97,7 @@ class TestHtmlConverterComplexCases(BaseEmmetTestCase):
         result = converter.convert(node_pool)
 
         expected_result = "div.token1>span{First}+span{Second}+span{Third}"
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_empty_elements(self, mock_single_token_names):
@@ -118,7 +118,7 @@ class TestHtmlConverterComplexCases(BaseEmmetTestCase):
         result = converter.convert(node_pool)
 
         expected_result = "div.token1>br+input[type=text]+hr"
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_mixed_attributes(self, mock_single_token_names):
@@ -137,4 +137,4 @@ class TestHtmlConverterComplexCases(BaseEmmetTestCase):
         result = converter.convert(node_pool)
 
         expected_result = 'div#contact.token1[data-test=value style="display: none"]>input[type=text required placeholder="Enter name"]'
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_result, result.result)

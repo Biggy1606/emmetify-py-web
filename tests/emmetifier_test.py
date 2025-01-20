@@ -15,8 +15,8 @@ class BaseTestCase(unittest.TestCase):
     def indent_debug(self, input_html: str):
         normal = Emmetifier(config=EmmetifierConfig(debug=False, indent=False))
         indented = Emmetifier(config=EmmetifierConfig(debug=False, indent=True))
-        normal_result = normal.emmetify(input_html)["result"]
-        indented_result = indented.emmetify(input_html)["result"]
+        normal_result = normal.emmetify(input_html).result
+        indented_result = indented.emmetify(input_html).result
         print(f"\n\nNormal:\n{normal_result}\n\nIndented:\n{indented_result}\n")
 
     def reverse_debug(self, abbr: str):
@@ -46,7 +46,7 @@ class BaseTestCase(unittest.TestCase):
         """Assert that the emmetified result is correct and that the reverse is correct"""
         self.assertEqual(
             expected_abbr,
-            emmetifier.emmetify(input_html)["result"],
+            emmetifier.emmetify(input_html).result,
             "Emmetified result is incorrect",
         )
 

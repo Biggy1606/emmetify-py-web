@@ -33,8 +33,8 @@ class TestHtmlConverterWithImageOptimization(BaseEmmetTestCase):
 
         expected_images_map = {"token1": "/images/test.jpg"}
         expected_result = 'img[src=token1 alt="Test image"]'
-        self.assertEqual(expected_images_map, result["maps"]["images"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_images_map, result.maps.images)
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_multiple_images_mapping(self, mock_single_token_names):
@@ -58,8 +58,8 @@ class TestHtmlConverterWithImageOptimization(BaseEmmetTestCase):
             "token2": "/images/second.jpg",
         }
         expected_result = 'div>img[src=token1 alt="First image"]+img[src=token2 alt="Second image"]'
-        self.assertEqual(expected_images_map, result["maps"]["images"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_images_map, result.maps.images)
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_reused_images_mapping(self, mock_single_token_names):
@@ -80,5 +80,5 @@ class TestHtmlConverterWithImageOptimization(BaseEmmetTestCase):
 
         expected_images_map = {"token1": "/images/test.jpg"}
         expected_result = "div>img[src=token1 alt=First]+img[src=token1 alt=Second]"
-        self.assertEqual(expected_images_map, result["maps"]["images"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_images_map, result.maps.images)
+        self.assertEqual(expected_result, result.result)

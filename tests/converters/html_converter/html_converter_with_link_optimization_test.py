@@ -33,8 +33,8 @@ class TestHtmlConverterWithLinkOptimization(BaseEmmetTestCase):
 
         expected_links_map = {"token1": "https://example.com"}
         expected_result = "a[href=token1]{Click me}"
-        self.assertEqual(expected_links_map, result["maps"]["links"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_links_map, result.maps.links)
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_multiple_links_mapping(self, mock_single_token_names):
@@ -58,8 +58,8 @@ class TestHtmlConverterWithLinkOptimization(BaseEmmetTestCase):
             "token2": "https://another.com",
         }
         expected_result = "div>a[href=token1]{First link}+a[href=token2]{Second link}"
-        self.assertEqual(expected_links_map, result["maps"]["links"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_links_map, result.maps.links)
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_reused_links_mapping(self, mock_single_token_names):
@@ -80,5 +80,5 @@ class TestHtmlConverterWithLinkOptimization(BaseEmmetTestCase):
 
         expected_links_map = {"token1": "https://example.com"}
         expected_result = "div>a[href=token1]{First link}+a[href=token1]{Same link}"
-        self.assertEqual(expected_links_map, result["maps"]["links"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_links_map, result.maps.links)
+        self.assertEqual(expected_result, result.result)

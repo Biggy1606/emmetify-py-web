@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Union
 
 from emmetify.config.base_config import EmmetifierConfig
@@ -49,6 +50,19 @@ class HtmlPriorityAttributeFilter:
 
         # Otherwise, keep secondary attributes
         return {k: v for k, v in filtered_attrs.items() if k in self.config.secondary_attrs}
+
+
+@dataclass
+class HtmlConverterMaps:
+    classes: dict[str, str]
+    links: dict[str, str]
+    images: dict[str, str]
+
+
+@dataclass
+class HtmlConverterResult:
+    result: str
+    maps: HtmlConverterMaps
 
 
 class HtmlConverter(BaseConverter[HtmlNodePool]):
@@ -218,14 +232,14 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
 
         return f"{indent}{node_emmet_str}"
 
-    def convert(self, node_pool: HtmlNodePool) -> str:
+    def convert(self, node_pool: HtmlNodePool) -> HtmlConverterResult:
         result = super().convert(node_pool)
 
-        return {
-            "result": result,
-            "maps": {
-                "classes": {v: k for k, v in self.classes_map.items()},
-                "links": {v: k for k, v in self.links_map.items()},
-                "images": {v: k for k, v in self.images_map.items()},
-            },
-        }
+        return HtmlConverterResult(
+            result=result,
+            maps=HtmlConverterMaps(
+                classes={v: k for k, v in self.classes_map.items()},
+                links={v: k for k, v in self.links_map.items()},
+                images={v: k for k, v in self.images_map.items()},
+            ),
+        )

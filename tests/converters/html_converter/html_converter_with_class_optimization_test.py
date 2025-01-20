@@ -43,8 +43,8 @@ class TestHtmlConverterWithClassOptimization(BaseEmmetTestCase):
 
         expected_class_map = {"token1": "test-class another-class"}
         expected_result = "div.token1{Eren Yeager}"
-        self.assertEqual(expected_class_map, result["maps"]["classes"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_class_map, result.maps.classes)
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_multiple_nodes_class_mapping(self, mock_single_token_names):
@@ -66,8 +66,8 @@ class TestHtmlConverterWithClassOptimization(BaseEmmetTestCase):
 
         expected_class_map = {"token1": "parent-class", "token2": "child-class"}
         expected_result = "div.token1>div.token2{Eren Yeager}"
-        self.assertEqual(expected_class_map, result["maps"]["classes"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_class_map, result.maps.classes)
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_reused_classes_mapping(self, mock_single_token_names):
@@ -89,8 +89,8 @@ class TestHtmlConverterWithClassOptimization(BaseEmmetTestCase):
 
         expected_class_map = {"token1": "same-class"}
         expected_result = "div.token1>div.token1{Eren Yeager}"
-        self.assertEqual(expected_class_map, result["maps"]["classes"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_class_map, result.maps.classes)
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_nested_nodes_with_multiple_classes(self, mock_single_token_names):
@@ -119,8 +119,8 @@ class TestHtmlConverterWithClassOptimization(BaseEmmetTestCase):
         }
         expected_result = "div.token1>div.token2+div.token3{Eren Yeager}"
 
-        self.assertEqual(expected_class_map, result["maps"]["classes"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_class_map, result.maps.classes)
+        self.assertEqual(expected_result, result.result)
 
     @patch("emmetify.converters.html_converter.SingleTokenNames")
     def test_without_text_nodes(self, mock_single_token_names):
@@ -138,5 +138,5 @@ class TestHtmlConverterWithClassOptimization(BaseEmmetTestCase):
 
         expected_class_map = {"token1": "container"}
         expected_result = "div.token1"
-        self.assertEqual(expected_class_map, result["maps"]["classes"])
-        self.assertEqual(expected_result, result["result"])
+        self.assertEqual(expected_class_map, result.maps.classes)
+        self.assertEqual(expected_result, result.result)
