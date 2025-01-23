@@ -48,8 +48,9 @@ class HtmlConfig(BaseModel):
 
     # Optimization options
     simplify_classes: bool = False
-    simplify_links: bool = False
     simplify_images: bool = False
+    simplify_absolute_links: bool = False
+    simplify_relative_links: bool = False
     skip_tags: bool = False
     skip_empty_attributes: bool = False
     prioritize_attributes: bool = False

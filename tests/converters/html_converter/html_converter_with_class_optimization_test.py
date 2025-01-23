@@ -12,7 +12,8 @@ class TestHtmlConverterWithClassOptimization(BaseEmmetTestCase):
     def setUp(self):
         self.config = EmmetifierConfig()
         self.config.html.simplify_classes = True
-        self.config.html.simplify_links = False
+        self.config.html.simplify_absolute_links = False
+        self.config.html.simplify_relative_links = False
         self.config.html.simplify_images = False
         self.config.html.skip_tags = False
         self.config.html.prioritize_attributes = False

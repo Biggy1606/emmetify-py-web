@@ -125,18 +125,32 @@ class HtmlConverter(BaseConverter[HtmlNodePool]):
             else:
                 parts.append(emmet_class_name)
 
-        # Process href for links
-        if self.config.html.simplify_links and "href" in attributes:
-            mapped_url = self.links_map.get(attributes["href"])
-            if not mapped_url:
-                single_token_url = self.single_token_names.get_name()
-                self.links_map[attributes["href"]] = single_token_url
-                attributes["href"] = single_token_url
-            else:
-                attributes["href"] = mapped_url
+        # Process href for absolute links
+        if node.tag == "a" and "href" in attributes:
+            href = attributes["href"]
+
+            # Simplify absolute links
+            if self.config.html.simplify_absolute_links and href.startswith("http"):
+                mapped_url = self.links_map.get(href)
+                if not mapped_url:
+                    single_token_url = self.single_token_names.get_name()
+                    self.links_map[href] = single_token_url
+                    attributes["href"] = single_token_url
+                else:
+                    attributes["href"] = mapped_url
+
+            # Simplify relative links
+            elif self.config.html.simplify_relative_links and not href.startswith("http"):
+                mapped_url = self.links_map.get(href)
+                if not mapped_url:
+                    single_token_url = self.single_token_names.get_name()
+                    self.links_map[href] = single_token_url
+                    attributes["href"] = single_token_url
+                else:
+                    attributes["href"] = mapped_url
 
         # Process src for images
-        if self.config.html.simplify_images and "src" in attributes:
+        if self.config.html.simplify_images and node.tag == "img" and "src" in attributes:
             mapped_src = self.images_map.get(attributes["src"])
             if not mapped_src:
                 single_token_src = self.single_token_names.get_name()

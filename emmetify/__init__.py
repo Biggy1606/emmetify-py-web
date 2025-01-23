@@ -10,19 +10,21 @@ def emmetify_html(content, format="html", **options):
     return emmetifier.emmetify(content)
 
 
-def emmetify_compact_html(content):
+def emmetify_compact_html(content, **options):
     """Convenience function for quick HTML conversion with simplified tags and attributes"""
-    emmetifier = Emmetifier(
+    emmetifier = Emmetifier.create(
         format="html",
         config={
             "html": {
                 "skip_tags": True,
                 "prioritize_attributes": True,
                 "simplify_classes": True,
-                "simplify_links": True,
                 "simplify_images": True,
+                "simplify_relative_links": False,
+                "simplify_absolute_links": True,
             }
         },
+        **options,
     )
     return emmetifier.emmetify(content)
 

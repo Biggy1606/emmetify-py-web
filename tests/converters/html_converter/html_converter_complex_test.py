@@ -10,7 +10,8 @@ class TestHtmlConverterComplexCases(BaseEmmetTestCase):
     def setUp(self):
         self.config = EmmetifierConfig()
         self.config.html.simplify_classes = True
-        self.config.html.simplify_links = True
+        self.config.html.simplify_absolute_links = True
+        self.config.html.simplify_relative_links = True
         self.config.html.simplify_images = True
         self.config.html.skip_tags = False
         self.config.html.prioritize_attributes = False
@@ -52,6 +53,7 @@ class TestHtmlConverterComplexCases(BaseEmmetTestCase):
             "token4",
             "token5",
             "token6",
+            "token7",
         ]
 
         parser = HtmlParser(self.config)
@@ -63,11 +65,12 @@ class TestHtmlConverterComplexCases(BaseEmmetTestCase):
                 Some text
                 <a href="https://example.com" class="link">Click</a>
                 <img src="/test.jpg" class="image" alt="Test">
+                <a href="/about">About</a>
             </div>
         """
         node_pool = parser.parse(input_html)
         result = converter.convert(node_pool)
-        expected_result = "div.token1>h1.token2{Hello}+{Some text}+a.token3[href=token4]{Click}+img.token5[src=token6 alt=Test]"
+        expected_result = "div.token1>h1.token2{Hello}+{Some text}+a.token3[href=token4]{Click}+img.token5[src=token6 alt=Test]+a[href=token7]{About}"
 
         self.assertEqual(expected_result, result.result)
 
