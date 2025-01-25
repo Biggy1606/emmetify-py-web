@@ -20,7 +20,8 @@ def emmetify_compact_html(content):
                 "prioritize_attributes": True,
                 "simplify_classes": True,
                 "simplify_images": True,
-                # LLM agents works better when they know the relative links, otherwise they will start looping on redirects
+                # LLM agents works better when they know the relative links
+                # otherwise they will start looping on redirects
                 "simplify_relative_links": False,
                 "simplify_absolute_links": True,
             }

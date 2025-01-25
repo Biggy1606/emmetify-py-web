@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "emmetify"
-version = "0.0.1-rc.5"
+version = "0.0.1-rc.6"
 description = "Cut LLM costs and boost processing speed by transforming verbose HTML into efficient Emmet notation"
 authors = ["Mariusz Korzekwa <mariusz@korzekwa.dev>"]
 repository = "https://github.com/emmetify/emmetify-py"
