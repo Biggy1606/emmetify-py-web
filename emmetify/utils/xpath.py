@@ -10,18 +10,18 @@ def restore_attribute_in_xpath(xpath: str, tag: str, attr: str, replace_map: dic
         rf"@{attr}=(?P<quote>['\"])(?P<value>.*?)(?P=quote)",
         rf"@{attr.lower()}=(?P<quote>['\"])(?P<value>.*?)(?P=quote)",
         # Contains function
-        rf"contains\(@{attr},(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
+        rf"contains\(@{attr}\s*,\s*(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
         # Normalize-space function
         rf"normalize-space\(@{attr}\)=(?P<quote>['\"])(?P<value>.*?)(?P=quote)",
         # Functions with normalize-space
-        rf"contains\(normalize-space\(@{attr}\),(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
+        rf"contains\(normalize-space\(@{attr}\)\s*,\s*(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
         # Nested functions with normalize-space
-        rf"ends-with\(normalize-space\(@{attr}\),(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
-        rf"starts-with\(normalize-space\(@{attr}\),(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
+        rf"ends-with\(normalize-space\(@{attr}\)\s*,\s*(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
+        rf"starts-with\(normalize-space\(@{attr}\)\s*,\s*(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
         # Other functions
-        rf"starts-with\(@{attr},(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
-        rf"ends-with\(@{attr},(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
-        rf"matches\(@{attr},(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
+        rf"starts-with\(@{attr}\s*,\s*(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
+        rf"ends-with\(@{attr}\s*,\s*(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
+        rf"matches\(@{attr}\s*,\s*(?P<quote>['\"])(?P<value>.*?)(?P=quote)\)",
     ]
 
     # Compile patterns with case-insensitive matching

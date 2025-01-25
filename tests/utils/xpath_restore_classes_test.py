@@ -95,6 +95,13 @@ class TestRestoreClassesInXPath(unittest.TestCase):
         result = restore_classes_in_xpath(xpath, replace_map)
         self.assertEqual(result, expected)
 
+    def test_class_with_multiple_predicates_and_functions_with_space(self):
+        xpath = "//*[@id='test' and contains(@class, 'john')]"
+        replace_map = {"john": "example-class"}
+        expected = "//*[@id='test' and contains(@class, 'example-class')]"
+        result = restore_classes_in_xpath(xpath, replace_map)
+        self.assertEqual(result, expected)
+
     def test_complex_xpath_expression(self):
         xpath = "//div//*[@class='john' and @data-id='123']//span[text()='Click here']"
         replace_map = {"john": "example-class"}
@@ -158,6 +165,13 @@ class TestRestoreClassesInXPath(unittest.TestCase):
         result = restore_classes_in_xpath(xpath, replace_map)
         self.assertEqual(result, expected)
 
+    def test_class_with_function_inside_predicate_with_space(self):
+        xpath = "//*[@class=concat('john', 'doe')]"
+        replace_map = {"johndoe": "example-class"}
+        expected = "//*[@class=concat('john', 'doe')]"
+        result = restore_classes_in_xpath(xpath, replace_map)
+        self.assertEqual(result, expected)
+
     def test_class_with_variable_in_predicate(self):
         xpath = "//*[@class=$john]"
         replace_map = {"$john": "example-class"}
@@ -176,6 +190,13 @@ class TestRestoreClassesInXPath(unittest.TestCase):
         xpath = "//*[@class='john'/*comment*/]"
         replace_map = {"john": "example-class"}
         expected = "//*[@class='example-class'/*comment*/]"
+        result = restore_classes_in_xpath(xpath, replace_map)
+        self.assertEqual(result, expected)
+
+    def test_class_with_double_slash_and_index(self):
+        xpath = "//footer//div[contains(@class, 'omi')]/text()[2]"
+        replace_map = {"omi": "example-class"}
+        expected = "//footer//div[contains(@class, 'example-class')]/text()[2]"
         result = restore_classes_in_xpath(xpath, replace_map)
         self.assertEqual(result, expected)
 
