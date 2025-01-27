@@ -15,6 +15,7 @@ run-quality-checks:
 	poetry run flake8 emmetify
 	@echo "======== Running mypy ========"
 	poetry run mypy emmetify
+	poetry run mypy examples
 
 .PHONY: run-tests
 run-tests:

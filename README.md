@@ -5,6 +5,8 @@
 [![PyPI Downloads](https://static.pepy.tech/badge/emmetify)](https://pepy.tech/projects/emmetify)
 [![codecov](https://codecov.io/gh/emmetify/emmetify-py/graph/badge.svg?token=GY70C7TMD8)](https://codecov.io/gh/emmetify/emmetify-py)
 [![license](https://img.shields.io/github/license/emmetify/emmetify-py.svg)](https://github.com/emmetify/emmetify-py/blob/main/LICENSE)
+[![Twitter Follow](https://img.shields.io/twitter/follow/maledorak?style=social)](https://x.com/maledorak)
+
 
 Cut your LLM processing costs by up to 90% by transforming verbose HTML into efficient Emmet notation, without losing structural integrity.
 
@@ -48,6 +50,16 @@ You can achieve even higher compression rates (up to 90%, or even more depending
 - Shortening URLs
 
 Check our documentation for detailed optimization strategies and their impact on token reduction.
+
+## Why Not Just Use Markdown? 🤔
+
+While Markdown is great for content representation, it removes HTML structure that's crucial for web automation. When working with tools like Selenium or Playwright, you need the actual DOM structure to click buttons, fill forms, and follow links. Emmetify gives you the best of both worlds:
+
+- Preserves complete HTML structure for accurate element targeting
+- Uses fewer tokens than raw HTML (up to 90% reduction)
+- Allows LLMs to make informed decisions about page navigation and interaction
+
+Perfect for scenarios where you need both efficiency and structural fidelity!
 
 ## The Technology Behind It 🔍
 
@@ -111,31 +123,32 @@ Much shorter, yet retains all necessary information for LLM navigation and proce
 #### Advanced Usage:
 
 ```python
-from emmetify import Emmetifier
+from emmetify import Emmetifier, emmetify_compact_html
 import requests
-import openai
 
-# Configure HTML simplification
+
+# Fetch and process HTML
+html = requests.get("https://example.com").text
+
+# Configure Emmetifier class
 emmetifier = Emmetifier(config={
     "html": {
         "skip_tags": True,
         "prioritize_attributes": True
     }
 })
+emmetified = emmetifier.emmetify(html)
+print(emmetified)
 
-# Fetch and process HTML
-html = requests.get("https://example.com").text
-result = emmetifier.emmetify(html).result
-print(result)
-
-# Use with your favorite LLM
-llm = openai.OpenAI()
-prompt = f"Get list of xpath selectors for all the links on the following page: {result}"
-response = llm.chat.completions.create(
-    model="gpt-4o-mini",
-    messages=[{"role": "user", "content": emmet}],
-)
+# or use the shorthand function, which is a shortcut for emmetifier.emmetify(html)
+# with the default configuration for compact HTML
+emmetified = emmetify_compact_html(html)
+print(emmetified)
 ```
+
+## Examples
+
+See the [examples](./examples/README.md) directory for more examples of how to use Emmetify.
 
 ## Backlog 📝
 
