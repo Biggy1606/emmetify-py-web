@@ -10,6 +10,24 @@
 
 Cut your LLM processing costs by up to 90% by transforming verbose HTML into efficient Emmet notation, without losing structural integrity.
 
+## TL;DR: Running the Web UI ⚡
+
+1. **Start the backend server:**
+
+   ```bash
+   cd web/server
+   uvicorn main:app --reload
+   ```
+
+2. **Start the frontend UI (in a new terminal):**
+
+   ```bash
+   cd web/ui
+   bun run dev
+   ```
+
+Then open your browser to the address provided by the frontend server (usually `http://localhost:5173`).
+
 ## Why Emmetify? 🤔
 
 - 💰 **Drastically Reduce Costs** - Process HTML with your LLM agents at a fraction of the cost by using our efficient Emmet-based compression
